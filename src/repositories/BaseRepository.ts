@@ -33,7 +33,7 @@ async filterBy(filter: Partial<T>): Promise<T[]> {
     for (const key in filter) {
       if (filter.hasOwnProperty(key)) {
         const checkedKey = key as keyof T;
-        if (item[checkedKey] !== filter[typedKey]) {
+        if (item[checkedKey] !== filter[checkedKey]) {
           return false;
         }
       }
