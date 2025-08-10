@@ -4,7 +4,7 @@ import EventEmitter from "events";
 const myEmitter = new EventEmitter();
 
 myEmitter.on("requestReceived", (method, url) => {
-  console.log(`Event: Request received → ${method} ${url}`);
+  console.log(`Event: Request received ${method} ${url}`);
 });
 
 const server = http.createServer((req, res) => {
