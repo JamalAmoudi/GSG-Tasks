@@ -1,10 +1,10 @@
-import { genericRepo } from "../../shared/generic.repository";
+import { GenericRepo } from "../../shared/generic.repository";
 import { RolesNamesType } from "../../util/constant";
 import { User } from "./user.entity";
 
 
-export class userRepository {
-    private repo = new genericRepo<User>();
+export class UserRepository {
+    private repo = new GenericRepo<User>();
     private counter = 0;
 
     allUsers(): User[] {

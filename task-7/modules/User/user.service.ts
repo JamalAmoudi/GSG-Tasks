@@ -1,11 +1,11 @@
 import { RolesNamesType } from "../../util/constant";
 import { User } from "./user.entity";
-import { userRepository } from "./user.repository";
+import { UserRepository } from "./user.repository";
 
 
-export class userService {
+export class UserService {
     // dependency injection
-    constructor(private userRepo: userRepository) { }
+    constructor(private userRepo: UserRepository) { }
     getUsers(): User[] {
         return this.userRepo.allUsers();
     }

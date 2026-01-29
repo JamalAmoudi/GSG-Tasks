@@ -1,64 +1,67 @@
 import { Request, Response, NextFunction } from "express"
-import { userService } from "./user.service";
+import { UserService } from "./user.service";
 import { User } from "./user.entity";
-import { userRepository } from "./user.repository";
+import { UserRepository } from "./user.repository";
 
 
 // At controller we are dealing with request & response
-export class userController {
+class UserController {
     // dependency injection
-    private service = new userService(new userRepository());
+
+    private service = new UserService(new UserRepository);
+
+    // private service = new UserService(new UserRepository());
 
     getAllUsers(req: Request, res: Response, next: NextFunction) {
         const users: User[] = this.service.getUsers();
-        return users;
+        return res.send(users);
     }
 
     getUser(req: Request<{ uid: string }>, res: Response, next: NextFunction) {
         const user = this.service.getUserById(req.params.uid);
 
         if (!user) {
-            throw new Error("User not found")
-            return;
+            return res.status(404).json({ message: "User Not Found!" });
         }
 
         return user;
     }
 
-    creatUser(req: Request, res: Response, next: NextFunction) {
+    public async creatUser(req: Request, res: Response, next: NextFunction) {
         const { name, email, password, role } = req.body;
 
         const checkOne = this.service.getUserByEmail(email);
         if (checkOne) {
-            throw new Error("There is a user with same credentials");
-            return;
+            return res.status(400).json({ message: "There is a user with same credentials" });
         }
-        return this.service.rigesterUser(name, email, password, role);
+        const createdUser = this.service.rigesterUser(name, email, password, role);
+        return res.send(createdUser)
     }
 
     updateUser(req: Request<{ uid: string }>, res: Response, next: NextFunction) {
         const userId = req.params.uid;
         if (!userId) {
-            throw new Error("ID Required")
-            return;
+            return res.status(400).json({ message: "ID Required" });
         }
         const user = this.service.getUserById(userId);
         if (!user) {
-            throw new Error("User Not Found")
-            return;
+            return res.status(404).json({ message: "User Not Found!" });
         };
 
         const { name, email } = req.body;
-        return this.service.updateUserAccount(userId, name, email);
+        const updatedUser = this.service.updateUserAccount(userId, name, email);
+        return res.send(updatedUser)
     }
 
     deleteUser(req: Request<{ uid: string }>, res: Response, next: NextFunction) {
         const userId = req.params.uid;
         if (!userId) {
-            throw new Error("ID Required")
-            return;
+            return res.status(400).json({ message: "ID Required" });
         }
-        return this.service.deleteUserAccount(userId);
+        const deletedUser = this.service.deleteUserAccount(userId);
+        return res.send(deletedUser)
     }
 
 }
+
+export const userController = new UserController();

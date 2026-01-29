@@ -2,7 +2,7 @@ export interface HasId {
     id: string;
 }
 
-export class genericRepo<T extends HasId> {
+export class GenericRepo<T extends HasId> {
     private Repository: T[] = [];
 
     getAll(): T[] {
