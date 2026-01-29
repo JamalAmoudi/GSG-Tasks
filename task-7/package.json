@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^25.0.10",
+    "typescript": "^5.9.3"
+  },
+  "name": "api",
+  "version": "1.0.0",
+  "description": "this project for task-7",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamalAmoudi/GSG-Tasks.git"
+  },
+  "author": "Jamal Amoudi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamalAmoudi/GSG-Tasks/issues"
+  },
+  "homepage": "https://github.com/JamalAmoudi/GSG-Tasks#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
