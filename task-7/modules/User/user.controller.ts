@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { UserService } from "./user.service";
+import { userService } from "./user.service";
 import { User } from "./user.entity";
 import { UserRepository } from "./user.repository";
 
@@ -8,23 +8,44 @@ import { UserRepository } from "./user.repository";
 class UserController {
     // dependency injection
 
-    private service = new UserService(new UserRepository);
-
-    // private service = new UserService(new UserRepository());
+    private service = userService;
 
     getAllUsers(req: Request, res: Response, next: NextFunction) {
         const users: User[] = this.service.getUsers();
         return res.send(users);
     }
 
-    getUser(req: Request<{ uid: string }>, res: Response, next: NextFunction) {
-        const user = this.service.getUserById(req.params.uid);
+    getUser(req: Request, res: Response, next: NextFunction) {
+        console.log("auth header:", req.headers.authorization);
+        console.log("cookies:", req.cookies);
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({ message: "Not authenticated" });
+        }
+
+        const user = this.service.getUserById(userId);
+        // if (req.params.uid)
+        //     user = this.service.getUserById(req.params.uid);
 
         if (!user) {
             return res.status(404).json({ message: "User Not Found!" });
         }
+        return res.status(200).json(user);
+    }
 
-        return user;
+    getUserByEmail(req: Request<{ email: string }>, res: Response, next: NextFunction) {
+        const email = req.params.email;
+        if (!email) {
+            return res.status(400).json({ message: "Email Required" });
+        }
+        const user = this.service.getUserByEmail(email);
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found!" });
+        };
+
+        return res.status(200).send(user);
     }
 
     public async creatUser(req: Request, res: Response, next: NextFunction) {
@@ -35,6 +56,7 @@ class UserController {
             return res.status(400).json({ message: "There is a user with same credentials" });
         }
         const createdUser = this.service.rigesterUser(name, email, password, role);
+
         return res.send(createdUser)
     }
 

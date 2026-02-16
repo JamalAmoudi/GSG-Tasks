@@ -3,7 +3,7 @@ import { User } from "./user.entity";
 import { UserRepository } from "./user.repository";
 
 
-export class UserService {
+class UserService {
     // dependency injection
     constructor(private userRepo: UserRepository) { }
     getUsers(): User[] {
@@ -17,7 +17,7 @@ export class UserService {
         return this.userRepo.findUserById(id);
     }
 
-    rigesterUser(name: string, email: string, password: string, role: RolesNamesType): User | undefined {
+    rigesterUser(name: string, email: string, password: string, role: RolesNamesType): User {
         return this.userRepo.createUser(name, email, password, role);
     }
 
@@ -25,8 +25,14 @@ export class UserService {
         return this.userRepo.updateUser(id, name, email);
     }
 
+    // changedPasswordAfter(payload:User):boolean {
+
+    // }
+
     deleteUserAccount(id: string): boolean {
         return this.userRepo.deleteUser(id);
     }
 
 }
+
+export const userService = new UserService(new UserRepository)

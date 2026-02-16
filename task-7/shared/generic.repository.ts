@@ -18,7 +18,7 @@ export class GenericRepo<T extends HasId> {
         return this.Repository.find(att)
     }
 
-    create(entity: T): T | undefined {
+    create(entity: T): T {
         this.Repository.push(entity);
         return entity;
     }

@@ -1,6 +1,9 @@
 {
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.3",
+    "@types/express-session": "^1.18.2",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
@@ -11,7 +14,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": " tsx watch server.ts"
+    "dev": " tsx watch server.ts",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -24,7 +28,13 @@
   },
   "homepage": "https://github.com/JamalAmoudi/GSG-Tasks#readme",
   "dependencies": {
+    "argon2": "^0.44.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "zod": "^4.3.6"
   }
 }
