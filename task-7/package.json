@@ -1,10 +1,15 @@
 {
   "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
@@ -13,7 +18,7 @@
   "description": "this project for task-7",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": " tsx watch server.ts",
     "type-check": "tsc --noEmit"
   },
@@ -28,6 +33,7 @@
   },
   "homepage": "https://github.com/JamalAmoudi/GSG-Tasks#readme",
   "dependencies": {
+    "@types/supertest": "^7.2.0",
     "argon2": "^0.44.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",

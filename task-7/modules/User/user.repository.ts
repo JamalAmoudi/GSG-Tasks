@@ -1,16 +1,21 @@
 import { GenericRepo } from "../../shared/generic.repository";
 import { RolesNamesType } from "../../util/constant";
 import { creatArgonhash } from "../Auth/util/argon.util";
+import { userData } from "./user.data";
 import { User } from "./user.entity";
 
 
 export class UserRepository {
-    private repo = new GenericRepo<User>();
+    private repo;
     private counter = 2;
 
-    constructor() {
+    constructor(users: User[] = userData) {
+        this.repo = new GenericRepo<User>;
+        users.forEach(user => this.repo.create(user));
         this.initDefaultAdmin();
     }
+
+
     private async initDefaultAdmin(): Promise<void> {
         const password = await creatArgonhash('admin123');
         const adminUser: User = {
@@ -23,7 +28,7 @@ export class UserRepository {
             role: 'ADMIN'
         }
 
-        this.repo.create(adminUser)
+        this.repo.create(adminUser);
     }
 
 

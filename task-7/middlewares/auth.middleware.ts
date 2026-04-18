@@ -78,7 +78,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
 
         // 4) Check if user changed password after the token was issued
 
-        if (currentUser.updatedAt.getTime() / 1000 > decodedUser.iat) {
+        if (Math.floor(currentUser.updatedAt.getTime() / 1000) > decodedUser.iat) {
             return next(
                 new CustomError('User recently changed password! Please log in again', MODULES_NAMES.auth, HttpErrorStatus.Unauthorized),
             );

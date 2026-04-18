@@ -52,7 +52,7 @@ class CourseController {
         }
         // const image = req.file ? `/uploads/${req.file.fileName}` : undefined;
         const course = this.service.createOne(upperTitle, description);
-        return res.status(200).send(course);
+        return res.status(201).send(course);
     }
 
     updateCourse(req: Request<{ cId: string }>, res: Response, next: NextFunction) {
