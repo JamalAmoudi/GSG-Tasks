@@ -1,52 +1,27 @@
-import { GenericRepo } from "../../shared/generic.repository";
+import { dbClient } from "../../services/prisma.service";
 import { RolesNamesType } from "../../util/constant";
-import { creatArgonhash } from "../Auth/util/argon.util";
-import { userData } from "./user.data";
+import { Prisma } from "@prisma/client";
 import { User } from "./user.entity";
 
 
 export class UserRepository {
-    private repo;
-    private counter = 2;
+    private userRepo = dbClient.user;
 
-    constructor(users: User[] = userData) {
-        this.repo = new GenericRepo<User>;
-        users.forEach(user => this.repo.create(user));
-        this.initDefaultAdmin();
+
+    allUsers(query: Prisma.UserFindManyArgs['where']): Promise<User[]> {
+        return this.userRepo.findMany({ where: query });
     }
 
-
-    private async initDefaultAdmin(): Promise<void> {
-        const password = await creatArgonhash('admin123');
-        const adminUser: User = {
-            id: '1',
-            name: 'Jamal',
-            email: 'admin@no.com',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            password: password,
-            role: 'ADMIN'
-        }
-
-        this.repo.create(adminUser);
+    findUserById(id: number): Promise<User | null> {
+        return this.userRepo.findUniqueOrThrow({ where: { id } });
     }
 
-
-    allUsers(): User[] {
-        return this.repo.getAll();
+    findUserByEmail(email: string): Promise<User | null> {
+        return this.userRepo.findUniqueOrThrow({ where: { email } });
     }
 
-    findUserById(id: string): User | undefined {
-        return this.repo.getById(id);
-    }
-
-    findUserByEmail(email: string): User | undefined {
-        return this.repo.findOne(user => user.email === email);
-    }
-
-    createUser(name: string, email: string, password: string, role: RolesNamesType): User {
-        const user: User = {
-            id: this.counter.toString(),
+    createUser(name: string, email: string, password: string, role: RolesNamesType): Promise<User> {
+        const user: Omit<User, 'id'> = {
             name,
             email,
             password,
@@ -55,25 +30,28 @@ export class UserRepository {
             updatedAt: new Date()
         }
 
-        this.counter++;
-        return this.repo.create(user);
+        return this.userRepo.create({ data: user });
     }
 
-    updateUser(id: string, name?: string, email?: string): User | null {
-        const user = this.findUserById(id);
-        if (!user) return null;
-        if (name) user.name = name;
-        if (email) user.email = email;
-
-        return this.repo.update(id, user);
+    updateUser(id: number, name?: string, email?: string): Promise<User | null> {
+        return this.userRepo.update({
+            where: {
+                id
+            },
+            data: {
+                name,
+                email
+            }
+        });
     }
 
-    deleteUser(id: string): boolean {
-        return this.repo.delete(id);
-    }
-
-    isUserStillExisted(id: string): boolean {
-        return this.repo.isExisted(id);
+    async deleteUser(id: number): Promise<boolean> {
+        const course = await this.findUserById(id);
+        if (course) {
+            this.userRepo.delete({ where: { id } });
+            return true;
+        }
+        return false
     }
 
 

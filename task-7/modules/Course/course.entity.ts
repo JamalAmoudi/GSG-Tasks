@@ -1,8 +1,3 @@
-export interface Course {
-    id: string;
-    title: string;
-    description: string;
-    image?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { Course as PrismaCourse } from "@prisma/client";
+
+export type Course = PrismaCourse;

@@ -1,9 +1,3 @@
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    role: "ADMIN" | "COACH" | "STUDENT";
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { User as PrismaUser } from "@prisma/client";
+
+export type User = PrismaUser;

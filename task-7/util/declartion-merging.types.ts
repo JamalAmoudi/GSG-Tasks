@@ -6,6 +6,7 @@ export type MyEnvs = {
     SESSION_SECRET: string;
     JWT_SECRET: string;
     MONGODB_URL: string;
+    DATABASE_URL: string;
 };
 
 declare global {

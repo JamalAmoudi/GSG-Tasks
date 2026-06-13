@@ -1,49 +1,67 @@
-import { GenericRepo } from "../../shared/generic.repository";
+import { dbClient } from "../../services/prisma.service";
+import type { Prisma } from "@prisma/client";
 import { Course } from "./course.entity";
 
 export class CourseRepository {
-    private repo = new GenericRepo<Course>;
-    private counter = 1;
-    allCourses(): Course[] {
-        return this.repo.getAll();
+    private courseRepo = dbClient.course;
+    async allCourses(
+        query: Prisma.CourseFindFirstArgs["where"],
+    ): Promise<Course[]> {
+        return await this.courseRepo.findMany({ where: query });
     }
 
-    findCourseById(id: string): Course | undefined {
-        return this.repo.getById(id);
+    findCourseById(id: number): Promise<Course> {
+        return this.courseRepo.findUniqueOrThrow({
+            where: {
+                id,
+            },
+        });
     }
 
-    findCourseByTitle(title: string): Course | undefined {
-        return this.repo.findOne(course => course.title === title);
+    findCourseByTitle(title: string): Promise<Course> {
+        return this.courseRepo.findFirstOrThrow({
+            where: {
+                title,
+            },
+        });
     }
 
-    createCourse(title: string, description: string, image?: string): Course {
-        const course: Course = {
-            id: this.counter.toString(),
+    createCourse(
+        title: string,
+        description: string,
+        image?: string,
+    ): Promise<Course> {
+        const course: Omit<Course, "id"> = {
             title: title,
             description,
+            image: image || null,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+        };
+        return this.courseRepo.create({
+            data: course,
+        });
+    }
+
+    updateCourse(
+        id: number,
+        title?: string,
+        description?: string,
+        image?: string,
+    ): Promise<Course> {
+        return this.courseRepo.update({
+            where: { id },
+            data: { title, description, image },
+        });
+    }
+
+    async deleteCourse(id: number): Promise<boolean> {
+        const course = await this.findCourseById(id);
+        if (course) {
+            this.courseRepo.delete({ where: { id } });
+            return true;
         }
-
-        if (image) {
-            course.image = image;
-        }
-        this.counter++;
-        return this.repo.create(course);
-
+        return false
     }
 
-    updateCourse(id: string, title?: string, description?: string, image?: string): Course | null {
-        const course = this.findCourseById(id);
-        if (!course) return null;
-        if (title) course.title = title;
-        if (description) course.description = description;
-        if (image) course.image = image;
-
-        return course;
-    }
-
-    deleteCourse(id: string): boolean {
-        return this.repo.delete(id);
-    }
-} 
+}

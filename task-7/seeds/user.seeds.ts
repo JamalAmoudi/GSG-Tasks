@@ -6,8 +6,7 @@ type acceptedRoleTypes = Exclude<RolesNamesType, "ADMIN">;
 const acceptedRoles: acceptedRoleTypes[] = ["STUDENT", "COACH"]
 
 export function createdRandomUser() {
-    const randomUser: User = {
-        id: faker.string.uuid(),
+    const randomUser: Omit<User, "id" | "course"> = {
         email: faker.internet.email(),
         name: faker.person.fullName(),
         password: faker.internet.password(),

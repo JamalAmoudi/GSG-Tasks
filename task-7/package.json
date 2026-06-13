@@ -8,6 +8,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
     "jest": "^30.3.0",
+    "prisma": "^7.8.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
     "tsx": "^4.21.0",
@@ -33,6 +34,8 @@
   },
   "homepage": "https://github.com/JamalAmoudi/GSG-Tasks#readme",
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@types/supertest": "^7.2.0",
     "argon2": "^0.44.0",
     "cookie-parser": "^1.4.7",
@@ -42,5 +45,8 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "zod": "^4.3.6"
+  },
+  "prisma": {
+    "seed": "tsx --env-file=.env prisma/seeds/seed.ts"
   }
 }
